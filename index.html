@@ -313,7 +313,9 @@
       </div>
       <div class="field">
         <label>How much did you donate? <span class="req">*</span></label>
-        <div class="amount-wrap"><span class="peso">₱</span><input type="number" id="amount" min="1" placeholder="0" inputmode="numeric" oninput="validate()"></div>
+        <div class="amount-wrap"><span class="peso">₱</span><input type="number" id="amount" min="50" step="50" placeholder="0" inputmode="numeric" oninput="onAmount()"></div>
+        <div class="field-hint">Any amount is welcome.</div>
+        <div class="amt-note" id="amtNote" style="display:none;"></div>
       </div>
       <div class="field" style="margin-bottom:0;">
         <label>Share your moment of generosity <span class="req">*</span></label>
@@ -325,11 +327,9 @@
 
   <div class="card">
     <div class="sec-head">Before you go, fam… 💚</div>
-    <p class="note">Did you know we've got merch?! 👀 The Madams' Merch Drop is packed with Madam-coded goodies made just for our fanmily — worn with pride, sparkly with kilig.</p>
+    <p class="note">Did you know we've got merch?! 👀 The Madams' Merch Drop is packed with Madam-coded goodies made just for our fanmily — collected with pride, sparkly with kilig.</p>
     <div class="info-links">
-      👉 Peek our drops here:<br>
-      🛍️ Batch 1 Merch: <a href="https://tinyurl.com/MadamsMerchDrop" target="_blank" rel="noopener">tinyurl.com/MadamsMerchDrop</a><br>
-      🎤 WR10 Concert Merch: <a href="https://tinyurl.com/MadamsMerchDrop-WR10" target="_blank" rel="noopener">tinyurl.com/MadamsMerchDrop-WR10</a>
+      👉 Peek our drops here: 🛍️ <a href="https://tinyurl.com/TheMadamsMerchDrop" target="_blank" rel="noopener">tinyurl.com/TheMadamsMerchDrop</a>
     </div>
     <p class="note" style="margin-top:12px; margin-bottom:0;">No pressure, fam — just a little treat-yourself moment. You've earned it! 🛍️💙</p>
   </div>
@@ -367,6 +367,18 @@
     } else { box.style.display = 'none'; }
   }
 
+  function onAmount(){
+    const a = Number(val('amount'));
+    const note = document.getElementById('amtNote');
+    if (note){
+      if (a > 0 && a % 50 !== 0){
+        note.style.display = 'block';
+        note.textContent = 'Kindly make it a multiple of ₱50 — it keeps our accounting neat. Salamat, Fam! 💚';
+      } else { note.style.display = 'none'; }
+    }
+    validate();
+  }
+
   function validate(){
     const emailOK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('email'));
     const agree = document.getElementById('agree').checked;
@@ -377,7 +389,7 @@
     if (donating){
       const amt = Number(val('amount'));
       const proofOK = document.getElementById('proofFile').files.length > 0;
-      ok = ok && val('paymentMethod') && amt > 0 && proofOK;
+      ok = ok && val('paymentMethod') && amt > 0 && amt % 50 === 0 && proofOK;
     }
     document.getElementById('lockBtn').disabled = !ok;
   }
